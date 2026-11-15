@@ -16,6 +16,12 @@ import numpy as np
 from django.http import HttpResponse, HttpResponseRedirect
 from dateutil.relativedelta import relativedelta
 
+def get_pf_number(user, default=None):
+    """PF number of a user: their ExtraInfo id (this used to be read from EIS records)."""
+    extra_info = ExtraInfo.objects.filter(user=user).first()
+    return extra_info.id if extra_info is not None else default
+
+
 def initial_checks(request):
     return {}
 
@@ -560,13 +566,7 @@ def handle_cpda_eligible(request):
     if 'cpda_request' in request.POST:
         try:
             applicant = request.user
-            # pf_number=1
-            # print(">>>>>>>>>>>",emp_consultancy_projects.objects.filter(user=request.user).first())
-            if(emp_consultancy_projects.objects.filter(user=request.user).first() is not None):
-                pf_number = emp_consultancy_projects.objects.filter(user=request.user).first().pf_no
-            else:
-                messages.error(request,"Please fill EIS Forms first.")
-                return 
+            pf_number = get_pf_number(request.user, default=1)
             purpose = request.POST.get('purpose')
             advance = request.POST.get('advance')
             status = 'requested'
@@ -739,12 +739,7 @@ def handle_ltc_eligible(request):
     if 'ltc_request' in request.POST:
         try:
             applicant = request.user
-            pf_number=1
-            if(emp_consultancy_projects.objects.filter(user=request.user).first() is not None):
-                pf_number = emp_consultancy_projects.objects.filter(user=request.user).first().pf_no
-            else:
-                messages.error(request,"Please fill EIS Forms(Consultancy Project) first.")
-                return 
+            pf_number = get_pf_number(request.user, default=1)
 
             basic_pay = request.POST.get('basic_pay')
             leave_start = request.POST.get('leave_start')
@@ -1079,9 +1074,7 @@ def generate_cpda_eligible_lists(request):
         for app in to_review_apps:
             app.reviewform = Review_Form(initial={'app_id': app.id})
 
-        pf_number=1234
-        if(emp_consultancy_projects.objects.filter(user=request.user).first() is not None):
-            pf_number = emp_consultancy_projects.objects.filter(user=request.user).first().pf_no
+        pf_number = get_pf_number(request.user, default=1234)
         
         form = Cpda_Form(initial={'pf_number':pf_number})
         bill_forms = {}
@@ -1163,9 +1156,7 @@ def generate_ltc_eligible_lists(request):
             availed_archived = (Ltc_availed.objects.filter(ltc__applicant=request.user).exclude(ltc__status='requested'))
             to_avail_archived = (Ltc_to_avail.objects.filter(ltc__applicant=request.user).exclude(ltc__status='requested'))
             depend_archived = (Dependent.objects.filter(ltc__applicant=request.user).exclude(ltc__status='requested'))
-            pf_number=1234
-            if(emp_consultancy_projects.objects.filter(user=request.user).first() is not None):
-                pf_number = emp_consultancy_projects.objects.filter(user=request.user).first().pf_no
+            pf_number = get_pf_number(request.user, default=1234)
             form = Ltc_Form(initial={'pf_number':pf_number})
 
         pf_number=1234
