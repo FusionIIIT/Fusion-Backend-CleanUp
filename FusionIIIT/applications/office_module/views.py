@@ -451,35 +451,6 @@ def frequest(request):
 
 
 
-def eisModulenew(request):
-    '''
-    This function is used to display the profile of the user.
-    It takes request from the user and checks the designation of the user.
-    If the designation is of type "supervisor" or "hod" it will display the profile of the user.
-    If the designation is of type "employee" it will display the profile of the employee.
-    If the designation is of type "admin" it will display the profile of the admin.
-    It returns the profile of the user.
-    @param request:request from the page
-    @var form:the form to be displayed
-    @return:returns the path to the form page
-    '''
-    project=Project_Registration.objects.select_related('PI_id__user','PI_id__department').all()
-    project1=Project_Extension.objects.select_related('project_id__PI_id__user','project_id__PI_id__department').all()
-    project2=Project_Closure.objects.select_related('project_id__PI_id__user','project_id__PI_id__department').all()
-    project3=Project_Reallocation.objects.select_related('project_id__PI_id__user','project_id__PI_id__department').all()
-
-    design = HoldsDesignation.objects.select_related('user','designation','working').filter(working=request.user)
-    print(design)
-    desig=[]
-    for i in design:
-        desig.append(str(i.designation))
-
-    context = {'project':project, 'project1':project1, 'project2':project2, 'project3':project3, 'desig':desig}
-
-    return render(request, "eisModulenew/profile.html", context)
-
-
-
 def officeOfPurchaseOfficr(request):
     '''
    This function is used to render the office of the purchase officer.
@@ -796,7 +767,7 @@ def project_register(request):
 
     context = {}
     messages.success(request, 'Application Sent.')
-    return render(request, "eisModulenew/profile.html", context)
+    return HttpResponseRedirect('/office/officeOfDeanRSPC/')
 
 
 # Project Registration Table End.................................................................................
@@ -905,7 +876,7 @@ def project_extension(request):
     else:
         messages.error(request, 'Invalid User for entered Project ID')
     context = {}
-    return render(request, "eisModulenew/profile.html", context)
+    return HttpResponseRedirect('/office/officeOfDeanRSPC/')
 
 
 # PROJECT EXTENSION TABLE END .......................................................................................
@@ -1000,7 +971,7 @@ def project_closure(request):
     else:
         messages.error(request, 'Invalid User for entered Project ID')
     context = {}
-    return render(request, "eisModulenew/profile.html", context)
+    return HttpResponseRedirect('/office/officeOfDeanRSPC/')
 
 
 # PROJECT CLOSURE TABLE END HERE ....................................................................................
@@ -1080,7 +1051,7 @@ def project_reallocation(request):
     else:
         messages.error(request, 'Invalid User for entered Project ID')
     context = {}
-    return render(request, "eisModulenew/profile.html", context)
+    return HttpResponseRedirect('/office/officeOfDeanRSPC/')
 
 
 # PROJECT REALLOCATION TABLE END HERE .................................................................................
@@ -1199,7 +1170,7 @@ def hod_action(request):
             obj.HOD_response='Forwarded'
             obj.save()
 
-    return HttpResponseRedirect('/office/eisModulenew/profile/')
+    return HttpResponseRedirect('/office/officeOfDeanRSPC/')
 
 def hod_closure(request):
     """
@@ -1221,7 +1192,7 @@ def hod_closure(request):
             obj.HOD_response='Forwarded'
             obj.save()
 
-    return HttpResponseRedirect('/office/eisModulenew/profile/')
+    return HttpResponseRedirect('/office/officeOfDeanRSPC/')
 
 def hod_extension(request):
     """
@@ -1239,7 +1210,7 @@ def hod_extension(request):
         if obj.HOD_response == 'Pending' or obj.HOD_response == 'pending' :
             obj.HOD_response='Forwarded'
             obj.save()
-    return HttpResponseRedirect('/office/eisModulenew/profile/')
+    return HttpResponseRedirect('/office/officeOfDeanRSPC/')
 
 def hod_allocation(request):
     """  This function is used to forward the request to hod.
@@ -1257,7 +1228,7 @@ def hod_allocation(request):
             obj.HOD_response='Forwarded'
             obj.save()
 
-    return HttpResponseRedirect('/office/eisModulenew/profile/')
+    return HttpResponseRedirect('/office/officeOfDeanRSPC/')
 
 def pdf(request,pr_id):
     '''
