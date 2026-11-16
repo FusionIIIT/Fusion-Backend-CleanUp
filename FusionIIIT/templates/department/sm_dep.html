@@ -125,9 +125,8 @@
                                 {%if fac_list.sm_f%}
                                 {% for fcu in fac_list.sm_f %}
                                 <tr>
-                                    {% with "/eis/profile/"|add:fcu.user.username as link %}
                                     <td>{{ fcu.id }}</td>
-                                    <td><a href = {{ link }}>{{fcu.title}} {{ fcu.user.first_name}} {{ fcu.user.last_name}}</a></td>
+                                    <td>{{fcu.title}} {{ fcu.user.first_name}} {{ fcu.user.last_name}}</td>
                                     <!-- <td>{{ fcu.title }}</td> -->
                                     <td>{{ fcu.sex }}</td>
                                     <td>{{ fcu.date_of_birth }}</td>
@@ -135,7 +134,6 @@
                                     {% comment %} <td>{{ fcu.user_type }}</td>
                                     <td>{{ fcu.department.name }}</td>
                                     <td>{{ fcu.id.faculty_about.github }}</td> {% endcomment %}
-                                    {% endwith %}
                                 </tr>
 
                                 {% endfor %}
