@@ -15,7 +15,6 @@ from applications.globals.models import (Designation, ExtraInfo,
                                          HoldsDesignation, User)
 from applications.scholarships.models import Mcm
 from applications.filetracking.models import (File, Tracking)
-from applications.eis.models import emp_research_projects, emp_patents, emp_consultancy_projects
 
 from notification.views import office_dean_PnD_notif,office_module_DeanRSPC_notif
 
@@ -807,7 +806,7 @@ def project_registration_permission(request):
     """
     called from officeOfDeanRSPC/action {name: registration} in office_module /urls.py
     usage: Save details of Dean RSPC response. He can either approve reject or forward the registration application.
-    model used: Project_Registration, emp_research_projects
+    model used: Project_Registration
     """
 
     """on approving project should be displayed in projects tab of Dean RSPC Dashboard"""
@@ -838,21 +837,6 @@ def project_registration_permission(request):
                 date_entry = obj.applied_date
                 status = "Ongoing"
 
-                """On approving project by Dean, it should be saved in emp_research_projects model"""
-                if ptype == "sponsoered research":
-                    emp_projects = emp_research_projects(pi=pi, co_pi=co_pi, title=title, funding_agency=funding_agency,
-                                                         start_date=start_date, finish_date=finish_date,
-                                                         date_entry=date_entry,
-                                                         financial_outlay=financial_outlay, status=status, pf_no=pf_no,
-                                                         ptype=ptype)
-                    emp_projects.save()
-                elif ptype == "consultancy":
-                    emp_projects = emp_consultancy_projects(consultants=pi, title=title, client=funding_agency,
-                                                            start_date=start_date, end_date=finish_date,
-                                                            duration=str(obj.duration) + " " + "weeks",
-                                                            financial_outlay=financial_outlay,
-                                                            pf_no=pf_no, date_entry=date_entry)
-                    emp_projects.save()
                 obj.DRSPC_response = "Approve"
                 obj.save()
                 # notification for dean RSPC
@@ -931,7 +915,7 @@ def project_extension_permission(request):
     """
     called from officeOfDeanRSPC/extension {name: extension} in office_module /urls.py
     usage: Save details of Dean RSPC response. He can either approve reject or forward the extended application.
-    model used: Project_Extension, emp_research_projects
+    model used: Project_Extension
     """
 
     """Project extension conditions added"""
@@ -940,22 +924,6 @@ def project_extension_permission(request):
         for id in id_list:
             obj = get_object_or_404(Project_Extension, pk=id)
             if "Pending" in obj.DRSPC_response or "Disapprove" in obj.DRSPC_response:
-                ob = get_object_or_404(Project_Registration, pk=obj.project_id.id)
-                pf = int(ob.PI_id.id)
-                title = ob.project_title
-                ptype = ob.project_type
-
-                if ptype == "sponsoered research":
-                    pr = emp_research_projects.objects.get(pf_no=pf, title=title)
-                    days = obj.extended_duration * 7
-                    pr.finish_date = pr.finish_date + timedelta(days=days)
-                    pr.save()
-
-                elif ptype == "consultancy":
-                    pr = emp_consultancy_projects.objects.get(pf_no=pf, title=title)
-                    days = obj.extended_duration * 7
-                    pr.end_date = pr.end_date + timedelta(days=days)
-                    pr.save()
 
                 obj.DRSPC_response = 'Approve'
                 obj.save()
@@ -1042,7 +1010,7 @@ def project_closure_permission(request):
     """
     called from officeOfDeanRSPC/closure {name: closure} in office_module /urls.py
     usage: Save details of Dean RSPC response. He can either approve reject or forward the closure application.
-    model used: Project_Closure, emp_research_projects
+    model used: Project_Closure
     """
 
     """Project closure conditions added"""
@@ -1122,7 +1090,7 @@ def project_reallocation_permission(request):
     """
     called from officeOfDeanRSPC/officeOfDeanRSPC/reallocation {name: reallocation} in office_module /urls.py
     usage: Save details of Dean RSPC response. He can either approve reject or forward the reallocated application.
-    model used: Project_Reallocation, emp_research_projects
+    model used: Project_Reallocation
     """
 
     """Project reallocation conditions added"""
@@ -1131,20 +1099,6 @@ def project_reallocation_permission(request):
         for id in id_list:
             obj = get_object_or_404(Project_Reallocation, pk=id)
             if "Pending" in obj.DRSPC_response or "Disapprove" in obj.DRSPC_response:
-                ob = Project_Registration.objects.select_related('PI_id__user','PI_id__department').get(pk=obj.project_id.id)
-                pf = int(ob.PI_id.id)
-                title = ob.project_title
-                ptype = ob.project_type
-
-                if ptype == "sponsoered research":
-                    pr = emp_research_projects.objects.get(pf_no=pf, title=title)
-                    pr.financial_outlay = obj.new_amount
-                    pr.save()
-
-                elif ptype == "consultancy":
-                    pr = emp_consultancy_projects.objects.get(pf_no=pf, title=title)
-                    pr.financial_outlay = obj.new_amount
-                    pr.save()
                 obj.DRSPC_response = 'Approve'
                 obj.save()
     elif 'forward' in request.POST:
