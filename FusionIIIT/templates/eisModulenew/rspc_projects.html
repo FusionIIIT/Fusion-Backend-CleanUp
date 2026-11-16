@@ -14,9 +14,6 @@
         <a class="item" data-tab="patents">
             Patents
         </a>
-        <a class="item" data-tab="technology transfer">
-            Technology Transfers
-        </a>
 
     </div>
 
@@ -202,57 +199,4 @@
     {% comment %}The Books segment ends here!{% endcomment %}
 
 
-    {% comment %}The Technology segment starts here!{% endcomment %}
-
-    <div class="ui tab segment" data-tab="technology transfer">
-        <h4 class="ui dividing header" id="changes11">Add a Technology Transfer</h4>
-        <form class="ui form"  method="post" action="{% url 'eis:transfer_insert' %}">
-            {% csrf_token %}
-            <div style="display: none;"> <input type="text" id="techZ" name="tech_id"></div>
-            <div class="field">
-                <div class="fourteen wide field">
-                    <div class="field">
-                        <label>Details</label>
-                        <input placeholder="Details" type="text" id="techA" name="details" required>
-                    </div>
-                </div>
-
-                <div class="two wide field">
-                    <label><br></label>
-                    <button class="ui primary button" type="submit">
-                            Save<i class="ui save icon right floated"></i>
-                        </button>
-                </div>
-            </div>
-        </form>
-        <br>
-
-         <h4 class="ui dividing header">Report:</h4>
-
-        <table class="ui fixed single line sortable celled table">
-            <thead>
-            <tr>
-                <!--<th class="sorted ascending">Sr.</th>
-                <th class="" colspan="4">Details</th>
-                <th class="">Action</th>-->
-                <th class="sorted ascending">Sr.</th>
-                <th class="" colspan="4">Details</th>
-                <th class="">Action</th>
-
-
-            </tr>
-            </thead>
-
-            <tbody>
-           {% for techtransfer in emp_techtransfers %}
-            <tr>
-                <td id="tech{{ forloop.counter }}Z"><div style="display: none;">{{ techtransfer.id }}</div>{{ forloop.counter }}.</td>
-                <td class="" colspan="4" id="tech{{ forloop.counter }}A">{{ techtransfer.details }}</td>
-                <td><a onclick="updateTECH({{ forloop.counter }})"><i id="bt" class="edit icon" style="font-size:1.3vw ; color:blue;"></i></a><br><a class="centered raised item" href="{% url 'eis:emp_techtransferDelete' techtransfer.id %}"><i id="bt" class="trash outline icon" style="font-size:1.3vw; color:red;"></i> </a> </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% comment %}The Technology segment ends here!{% endcomment %}
 {% endblock %}
