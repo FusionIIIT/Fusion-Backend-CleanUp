@@ -4,10 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from applications.globals.models import ExtraInfo, HoldsDesignation, Designation
 from applications.academic_information.models import Curriculum_Instructor
-from applications.eis.models import (emp_consultancy_projects,emp_research_projects,
-                                        emp_mtechphd_thesis,emp_patents,emp_techtransfer,
-                                            emp_published_books,emp_confrence_organised,
-                                            emp_achievement,emp_event_organized)
 from django.db.models import Avg, Count, Min, Sum,Q
 from datetime import datetime,date
 from .models import *
@@ -1216,15 +1212,6 @@ def generate_appraisal_lists(request):
         for course in course_objects:
             if(course.instructor_id.user == request.user):
                 user_courses.append(course)
-        consultancy_projects = emp_consultancy_projects.objects.filter(user = request.user)
-        research_projects = emp_research_projects.objects.filter(user = request.user)
-        thesis = emp_mtechphd_thesis.objects.filter(user = request.user)
-        patents = emp_patents.objects.filter(user = request.user)
-        tech_transfer = emp_techtransfer.objects.filter(user = request.user)
-        publications = emp_published_books.objects.filter(user = request.user)
-        conferences = emp_confrence_organised.objects.filter(user = request.user)
-        achievments = emp_achievement.objects.filter(user = request.user)
-        events = emp_event_organized.objects.filter(user = request.user)
         active_apps = (Appraisal.objects.select_related('applicant').filter(applicant=request.user).exclude(status='Processed').order_by('-timestamp'))
         archive_apps = Appraisal.objects.select_related('applicant').filter(applicant=request.user).exclude(status='requested').order_by('-timestamp')
         request_active = (AppraisalRequest.objects.select_related('appraisal').filter(appraisal__applicant=request.user).filter(appraisal__status='requested'))
@@ -1234,15 +1221,6 @@ def generate_appraisal_lists(request):
         # print('-----------', request_active[0].remark_hod, '----------------')
         response.update({
                 'user_courses': user_courses,
-                'consultancy_projects': consultancy_projects,
-                'research_projects': research_projects,
-                'thesis': thesis,
-                'patents': patents,
-                'tech_transfer': tech_transfer,
-                'publications': publications,
-                'conferences': conferences,
-                'achievments': achievments,
-                'events': events,
                 'appraisal_active_apps':active_apps,
                 'appraisal_archive_apps':archive_apps,
                 'appraisal_requests_active':request_active,
@@ -1267,15 +1245,6 @@ def generate_appraisal_lists_hod(request):
         review_apps_hod = AppraisalRequest.objects.select_related('appraisal').filter(hod = request.user).filter(status_hod = 'pending').order_by('-request_timestamp')
         reviewed_apps_hod = AppraisalRequest.objects.select_related('appraisal').filter(hod = request.user).exclude(status_hod = 'pending').order_by('-request_timestamp')
         course_objects_all = Curriculum_Instructor.objects.all()
-        consultancy_projects_all = emp_consultancy_projects.objects.all()
-        research_projects_all = emp_research_projects.objects.all()
-        thesis_all = emp_mtechphd_thesis.objects.all()
-        events_all = emp_event_organized.objects.all()
-        patents_all = emp_patents.objects.all()
-        tech_transfer_all = emp_techtransfer.objects.all()
-        publications_all = emp_published_books.objects.all()
-        conferences_all = emp_confrence_organised.objects.all()
-        achievments_all = emp_achievement.objects.all()
         appraisal_all = Appraisal.objects.select_related('applicant').all()
         new_courses_offered_all = NewCoursesOffered.objects.all()
         new_courses_material_all = NewCourseMaterial.objects.all()
@@ -1284,15 +1253,6 @@ def generate_appraisal_lists_hod(request):
             'reviewed_apps_hod': reviewed_apps_hod,
             'course_objects_all': course_objects_all,
             'review_apps_hod': review_apps_hod,
-            'thesis_all': thesis_all,
-            'events_all': events_all,
-            'patents_all': patents_all,
-            'tech_transfer_all': tech_transfer_all,
-            'publications_all': publications_all,
-            'conferences_all': conferences_all,
-            'achievments_all': achievments_all,
-            'consultancy_projects_all': consultancy_projects_all,
-            'research_projects_all': research_projects_all,
             'appraisal_all': appraisal_all,
             'new_courses_offered_all': new_courses_offered_all,
             'new_courses_material_all': new_courses_material_all
@@ -1312,15 +1272,6 @@ def generate_appraisal_lists_director(request):
         review_apps_director = AppraisalRequest.objects.select_related('appraisal').filter(director = request.user).filter(status_director = 'pending').exclude(status_hod = 'pending').order_by('-request_timestamp')
         reviewed_apps_director = AppraisalRequest.objects.select_related('appraisal').filter(director = request.user).exclude(status_director = 'pending').order_by('-request_timestamp')
         course_objects_all = Curriculum_Instructor.objects.all()
-        consultancy_projects_all = emp_consultancy_projects.objects.all()
-        research_projects_all = emp_research_projects.objects.all()
-        thesis_all = emp_mtechphd_thesis.objects.all()
-        events_all = emp_event_organized.objects.all()
-        patents_all = emp_patents.objects.all()
-        tech_transfer_all = emp_techtransfer.objects.all()
-        publications_all = emp_published_books.objects.all()
-        conferences_all = emp_confrence_organised.objects.all()
-        achievments_all = emp_achievement.objects.all()
         appraisal_all = Appraisal.objects.select_related('applicant').all()
         new_courses_offered_all = NewCoursesOffered.objects.all()
         new_courses_material_all = NewCourseMaterial.objects.all()
@@ -1329,15 +1280,6 @@ def generate_appraisal_lists_director(request):
             'course_objects_all': course_objects_all,
             'review_apps_director': review_apps_director,
             'reviewed_apps_director': reviewed_apps_director,
-            'thesis_all': thesis_all,
-            'events_all': events_all,
-            'patents_all': patents_all,
-            'tech_transfer_all': tech_transfer_all,
-            'publications_all': publications_all,
-            'conferences_all': conferences_all,
-            'achievments_all': achievments_all,
-            'consultancy_projects_all': consultancy_projects_all,
-            'research_projects_all': research_projects_all,
             'appraisal_all': appraisal_all,
             'new_courses_offered_all': new_courses_offered_all,
             'new_courses_material_all': new_courses_material_all
@@ -1355,15 +1297,6 @@ def generate_appraisal_lists_admin(request):
         response = {}
         appraisal_requests = AppraisalRequest.objects.exclude(status_director = 'pending').exclude(status_hod = 'pending')
         course_objects_all = Curriculum_Instructor.objects.all()
-        consultancy_projects_all = emp_consultancy_projects.objects.all()
-        research_projects_all = emp_research_projects.objects.all()
-        thesis_all = emp_mtechphd_thesis.objects.all()
-        events_all = emp_event_organized.objects.all()
-        patents_all = emp_patents.objects.all()
-        tech_transfer_all = emp_techtransfer.objects.all()
-        publications_all = emp_published_books.objects.all()
-        conferences_all = emp_confrence_organised.objects.all()
-        achievments_all = emp_achievement.objects.all()
         appraisal_all = Appraisal.objects.select_related('applicant').all()
         new_courses_offered_all = NewCoursesOffered.objects.all()
         new_courses_material_all = NewCourseMaterial.objects.all()
@@ -1372,15 +1305,6 @@ def generate_appraisal_lists_admin(request):
             'admin': True,
             'course_objects_all': course_objects_all,
             'appraisal_requests': appraisal_requests,
-            'thesis_all': thesis_all,
-            'events_all': events_all,
-            'patents_all': patents_all,
-            'tech_transfer_all': tech_transfer_all,
-            'publications_all': publications_all,
-            'conferences_all': conferences_all,
-            'achievments_all': achievments_all,
-            'consultancy_projects_all': consultancy_projects_all,
-            'research_projects_all': research_projects_all,
             'appraisal_all': appraisal_all,
             'new_courses_offered_all': new_courses_offered_all,
             'new_courses_material_all': new_courses_material_all
@@ -1388,111 +1312,6 @@ def generate_appraisal_lists_admin(request):
         return response
     except Exception as e:
             messages.error(request,e)
-
-def update_appraisal_lists(request):
-    try:
-        start = request.POST.get('start_date')
-        start_date = date.fromisoformat(start)
-        end = request.POST.get('end_date')
-        end_date = date.fromisoformat(end)
-        
-        response = {}
-        # print('Kaise ho jiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
-        achievments = emp_achievement.objects.filter(user = request.user)
-        achievments_date = []
-        for obj in achievments:
-            # print('obj1',obj)
-            if(obj.achievment_date is not None):
-                if(start_date <= obj.achievment_date <= end_date):
-                    achievments_date.append(obj)
-                # print('achievments_date',achievments_date)
-        consultancy_projects = emp_consultancy_projects.objects.filter(user = request.user)
-        consultancy_projects_date = []
-        for obj in consultancy_projects:
-            # print('obj2',obj)
-            if((obj.start_date is not None) and (obj.end_date is not None)):
-                if(start_date <= obj.start_date <= end_date or start_date <= obj.end_date <= end_date):
-                    consultancy_projects_date.append(obj)
-                # print('consultancy_projects_date',consultancy_projects_date)
-        research_projects = emp_research_projects.objects.filter(user = request.user)
-        research_projects_date = []
-        for obj in research_projects:
-            if((obj.start_date is not None) and (obj.finish_date is not None) and (obj.date_submission is not None)):
-                if(start_date <= obj.start_date <= end_date or start_date <= obj.finish_date <= end_date or start_date <= obj.date_submission <= end_date):
-                    research_projects_date.append(obj)
-        thesis = emp_mtechphd_thesis.objects.filter(user = request.user)
-        thesis_date = []
-        for obj in thesis:
-            # print('onj3',obj)
-            if((obj.start_date is not None) and (obj.end_date is not None)):
-                if(start_date <= obj.start_date <= end_date or start_date <= obj.end_date <= end_date):
-                    thesis_date.append(obj)
-                # print('thesis_date',thesis_date)
-        # print('after')
-        patents = emp_patents.objects.filter(user = request.user)
-        patents_date = []
-        # print('obj4')
-        for obj in patents:
-            # print('obj4',obj)
-            if((obj.start_date is not None) and (obj.end_date is not None)):
-                if(start_date <= obj.start_date <= end_date or start_date <= obj.end_date <= end_date):
-                    patents_date.append(obj)
-                # print('patents_date',patents_date)
-        tech_transfer = emp_techtransfer.objects.filter(user = request.user)
-        tech_transfer_date = []
-        # print('obj5')
-        for obj in tech_transfer:
-            # print('obj5',obj)
-            if((obj.start_date is not None) and (obj.end_date is not None)):
-                if(start_date <= obj.start_date <= end_date or start_date <= obj.end_date <= end_date):
-                    tech_transfer_date.append(obj)
-                # print('tech_transfer_date',tech_transfer_date)
-        publications = emp_published_books.objects.filter(user = request.user)
-        publications_date = []
-        # print('obj6')
-        for obj in publications:
-            # print('obj6',obj)
-            if(obj.publication_date is not None):
-                if(start_date <= obj.publication_date <= end_date):
-                    publications_date.append(obj)
-                # print('publications_date',publications_date)
-        conferences = emp_confrence_organised.objects.filter(user = request.user)
-        conferences_date = []
-        # print('obj7')
-        for obj in conferences:
-            # print('obj7',obj)
-            if((obj.start_date is not None) and (obj.end_date is not None)):
-                if(start_date <= obj.start_date <= end_date or start_date <= obj.end_date <= end_date):
-                    conferences_date.append(obj)
-                # print('conferences_date',conferences_date)
-        
-        events = emp_event_organized.objects.filter(user = request.user)
-        events_date = []
-        # print('obj8')
-        for obj in events:
-            # print('obj8',obj)
-            if((obj.start_date is not None) and (obj.end_date is not None)):
-                if(start_date <= obj.start_date <= end_date or start_date <= obj.end_date <= end_date):
-                    events_date.append(obj)
-                # print('events_date',events_date)
-        response.update({
-                'achievments': achievments_date,
-                'consultancy_projects': consultancy_projects_date,
-                'research_projects': research_projects_date,
-                'thesis': thesis_date,
-                'patents': patents_date,
-                'tech_transfer': tech_transfer_date,
-                'publications': publications_date,
-                'conferences': conferences_date,
-                'events': events_date,
-                'start_date': start_date,
-                'end_date': end_date
-        })
-        # print('THE END!!!!!!!!!!!!!')
-        return response
-    except Exception as e:
-            messages.error(request,e)
-
 
 @login_required(login_url='/accounts/login')
 def establishment(request):
@@ -1597,8 +1416,6 @@ def appraisal(request):
         app = handle_appraisal(request)
     if is_eligible(request):
         response.update(generate_appraisal_lists(request))
-    if is_eligible(request) and request.method == "POST" and 'filter_eis_details' in request.POST:
-        response.update(update_appraisal_lists(request))
     # If user has designation "HOD"
     if is_hod(request):
         response.update(generate_appraisal_lists_hod(request))
