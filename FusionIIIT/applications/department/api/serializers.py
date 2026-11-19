@@ -3,7 +3,6 @@ from applications.department.models import Announcements
 from applications.academic_information.models import Spi, Student
 from applications.globals.models import (Designation, ExtraInfo,
                                          HoldsDesignation,Faculty)
-from applications.eis.models import (faculty_about, emp_research_projects)
 
 
 class AnnouncementSerializer(serializers.ModelSerializer):
@@ -49,14 +48,4 @@ class HoldsDesignationSerializer(serializers.ModelSerializer):
 class FacultySerializer(serializers.ModelSerializer):
     class Meta:
         model = Faculty 
-        fields = ('__all__')
-
-class faculty_aboutSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = faculty_about 
-        fields = ('__all__')
-        
-class emp_research_projectsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = emp_research_projects 
         fields = ('__all__')

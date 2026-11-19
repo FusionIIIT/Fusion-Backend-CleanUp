@@ -7,11 +7,9 @@ from django.db.models import Q
 from django.http import Http404
 from .forms import EditDetailsForm, EditConfidentialDetailsForm, EditServiceBookForm, NewUserForm, AddExtraInfo
 from django.contrib import messages
-from applications.eis.models import *
 from django.http import HttpResponse, HttpResponseRedirect
 from applications.establishment.models import *
 from applications.establishment.views import *
-from applications.eis.models import *
 from applications.globals.models import ExtraInfo, HoldsDesignation, DepartmentInfo, Designation
 
 from html import escape
@@ -125,28 +123,14 @@ def service_book(request):
     workAssignemnt = WorkAssignemnt.objects.filter(
         extra_info_id=pf).order_by('-start_date')
 
-    empprojects = emp_research_projects.objects.filter(
-        pf_no=pf).order_by('-start_date')
-    visits = emp_visits.objects.filter(pf_no=pf).order_by('-entry_date')
-    conferences = emp_confrence_organised.objects.filter(
-        pf_no=pf).order_by('-date_entry')
     template = 'hr2Module/servicebook.html'
-    awards = emp_achievement.objects.filter(pf_no=pf).order_by('-date_entry')
-    thesis = emp_mtechphd_thesis.objects.filter(
-        pf_no=pf).order_by('-date_entry')
     context = {'lienServiceBooks': lien_service_book, 'deputationServiceBooks': deputation_service_book, 'otherServiceBooks': other_service_book,
                'appraisalForm': appraisal_form,
-               'empproject': empprojects,
-               'visits': visits,
-               'conferences': conferences,
-               'awards': awards,
-               'thesis': thesis,
                'extrainfo': extra_info,
                'workAssignment': workAssignemnt,
-               'awards': awards
                }
 
-    return HttpResponseRedirect("/eis/profile/")
+    return HttpResponseRedirect("/")
     # return render(request, template, context)
 
 
@@ -178,14 +162,6 @@ def view_employee_details(request, id):
     workAssignemnt = WorkAssignemnt.objects.filter(
         extra_info_id=pf).order_by('-start_date')
 
-    empprojects = emp_research_projects.objects.filter(
-        pf_no=pf).order_by('-start_date')
-    visits = emp_visits.objects.filter(pf_no=pf).order_by('-entry_date')
-    conferences = emp_confrence_organised.objects.filter(
-        pf_no=pf).order_by('-date_entry')
-    awards = emp_achievement.objects.filter(pf_no=pf).order_by('-date_entry')
-    thesis = emp_mtechphd_thesis.objects.filter(
-        pf_no=pf).order_by('-date_entry')
 
     response = {}
     # Check if establishment variables exist, if not create some fields or ask for them
@@ -210,11 +186,6 @@ def view_employee_details(request, id):
     template = 'hr2Module/viewdetails.html'
     context.update({'lienServiceBooks': lien_service_book, 'deputationServiceBooks': deputation_service_book, 'otherServiceBooks': other_service_book, 'user': extra_info.user, 'extrainfo': extra_info,
                'appraisalForm': appraisal_form,
-               'empproject': empprojects,
-               'visits': visits,
-               'conferences': conferences,
-               'awards': awards,
-               'thesis': thesis,
                'workAssignment': workAssignemnt,
             #    'designat':designat,
                 

@@ -822,7 +822,7 @@ def dashboard(request):
 def   profile(request, username=None):
     """
     Generic endpoint for views.
-    If it's a faculty, redirects to /eis/profile/*
+    If it's a faculty, redirects to the dashboard (/)
     If it's a student, displays the profile.
     If the department is 'department: Academics:, redirects to /aims/
     Otherwise, redirects to root
@@ -841,7 +841,7 @@ def   profile(request, username=None):
     print("profile",profile)
     if(str(user.extrainfo.user_type)=='faculty'):
         print("profile")
-        return HttpResponseRedirect('/eis/profile/' + (username if username else ''))
+        return HttpResponseRedirect('/')
     if(str(user.extrainfo.department)=='department: Academics'):
         print("profile2")
         return HttpResponseRedirect('/aims')

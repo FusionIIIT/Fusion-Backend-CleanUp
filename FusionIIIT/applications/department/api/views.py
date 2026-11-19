@@ -4,9 +4,8 @@ from applications.department.models import Announcements
 from applications.academic_information.models import Spi, Student
 from applications.globals.models import (Designation, ExtraInfo,
                                          HoldsDesignation,Faculty)
-from applications.eis.models import (faculty_about, emp_research_projects)
 from .serializers import (AnnouncementSerializer,ExtraInfoSerializer,SpiSerializer,StudentSerializer,DesignationSerializer
-                          ,HoldsDesignationSerializer,FacultySerializer,faculty_aboutSerializer,emp_research_projectsSerializer)
+                          ,HoldsDesignationSerializer,FacultySerializer)
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsFacultyStaffOrReadOnly
 from django.http import JsonResponse 

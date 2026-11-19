@@ -48,7 +48,6 @@ urlpatterns = [
     url(r'^officeOfDeanRSPC/reallocation_details/(?P<pr_id>[0-9]+)/$', views.reallocate_details,
         name='reallocate_details'),
 
-    url(r'^eisModulenew/profile', views.eisModulenew, name='eisModulenew'),
 
     url(r'^officeOfDeanPnD/$', views.officeOfDeanPnD, name='officeOfDeanPnD'),
     url(r'^officeOfHOD/$', views.officeOfHOD, name='officeOfHOD'),
