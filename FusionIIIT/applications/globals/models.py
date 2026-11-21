@@ -1,4 +1,4 @@
-import datetime
+﻿import datetime
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -30,7 +30,6 @@ class Constants:
 
     MODULES = (
         ("academic_information", "Academic"),
-        ("central_mess", "Central Mess"),
         ("complaint_system", "Complaint System"),
         ("eis", "Employee Imformation System"),
         ("file_tracking", "File Tracking System"),
@@ -287,7 +286,7 @@ class Issue(models.Model):
 
         user(User) - to link the user who is reporting the issue
        report_type(char) - to store the issue type (eg: feature request, bug report etc ) 
-       module(char) -  to store in which module the issue was found(eg : Academic, Mess etc)
+       module(char) - to store in which module the issue was found
        closed(boolean) -  to denote whether the issue has been resolved or not
        text(Text) -  textual description of the issue
        title(char) -  to store the title of the issue
@@ -333,7 +332,6 @@ class ModuleAccess(models.Model):
     purchase_and_store = models.BooleanField(default=False)
     rspc = models.BooleanField(default=False)
     hostel_management = models.BooleanField(default=False)
-    mess_management = models.BooleanField(default=False)
     gymkhana = models.BooleanField(default=False)
     placement_cell = models.BooleanField(default=False)
     visitor_hostel = models.BooleanField(default=False)
@@ -354,7 +352,7 @@ class PasswordResetTracker(models.Model):
 class PasswordResetOTP(models.Model):
     """
     Stores a single active OTP record per username.
-    - otp_hash         : HMAC-SHA256(SECRET_KEY, otp) — never stores plaintext OTP
+    - otp_hash         : HMAC-SHA256(SECRET_KEY, otp) â€” never stores plaintext OTP
     - attempts         : failed verify attempts; locked after OTP_MAX_ATTEMPTS
     - send_count       : OTPs sent in the current rate-limit window
     - window_start     : start of the current hour-long rate-limit window
