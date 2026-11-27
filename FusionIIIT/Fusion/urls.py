@@ -61,7 +61,6 @@ urlpatterns = [
 
     url(r'^eis/', include('applications.eis.urls')),
     url(r'^mess/', include('applications.central_mess.urls')),
-    url(r'^complaint/', include('applications.complaint_system.urls')),
     url(r'^healthcenter/', include('applications.health_center.urls')),
     url(r'^leave/', include('applications.leave.urls')),
     url(r'^placement/', include('applications.placement_cell.api.urls')),
@@ -74,7 +73,6 @@ urlpatterns = [
     url(r'^library/', include('applications.library.urls')),
     url(r'^establishment/', include('applications.establishment.urls')),
     url(r'^ocms/', include('applications.online_cms.urls')),
-    url(r'^counselling/', include('applications.counselling_cell.urls')),
     url(r'^hostelmanagement/', include('applications.hostel_management.urls')),
     url(r'^hr2/', include('applications.hr2.urls')),
     url(r'^recruitment/', include('applications.recruitment.urls')),

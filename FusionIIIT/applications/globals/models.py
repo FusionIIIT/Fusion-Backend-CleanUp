@@ -31,7 +31,6 @@ class Constants:
     MODULES = (
         ("academic_information", "Academic"),
         ("central_mess", "Central Mess"),
-        ("complaint_system", "Complaint System"),
         ("eis", "Employee Imformation System"),
         ("file_tracking", "File Tracking System"),
         ("health_center", "Health Center"),
